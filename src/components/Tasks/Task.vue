@@ -9,10 +9,13 @@
     </q-item-section>
 
     <q-item-section side top>
-      <div class="row"></div>
       <q-item-label name></q-item-label>
       <q-item-label caption>{{task.dateDay}}</q-item-label>
       <q-item-label caption>{{task.dateTime}}</q-item-label>
+    </q-item-section>
+
+    <q-item-section side>
+      <q-btn flat round color="red" @click.stop="promptToDelete(id)" dense icon="delete" />
     </q-item-section>
   </q-item>
 </template>
@@ -22,7 +25,19 @@ import { mapActions } from "vuex";
 export default {
   props: ["task", "id"],
   methods: {
-    ...mapActions("tasks", ["updateTask"]),
+    ...mapActions("tasks", ["updateTask", "deleteTask"]),
+    promptToDelete(id) {
+      this.$q
+        .dialog({
+          title: "Confirm",
+          message: "Really Delete?",
+          cancel: true,
+          persistent: true,
+        })
+        .onOk(() => {
+          this.deleteTask(id);
+        });
+    },
   },
 };
 </script>
